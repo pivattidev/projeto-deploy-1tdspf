@@ -10,7 +10,7 @@ export default function EditarProdutos() {
 
   const { id } = useParams<{ id: string }>();
 
-  const [produto, setProduto] = useState<TipoProduto>({ id: "", nome: "", preco: 0, avatar: "" });
+  const [produto, setProduto] = useState<TipoProduto>({ id: "", nome: "", preco: 0, estoque: 0, avatar: "" });
 
   useEffect(() => {
 

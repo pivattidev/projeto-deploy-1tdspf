@@ -5,6 +5,7 @@ import CardProduto from "../../components/CardProduto";
 import { FaEdit as Editar } from "react-icons/fa";
 import { MdDeleteForever as Excluir } from "react-icons/md";
 
+const API_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnRj8ZTXEXmVzTVMwCe_eYo_mHayvb7ZFyVAvfN2ZFi7E_ynvl7OSNNDxwAKY5cYIx4eG4oFfyzvzJPJCiIQDoq2_8g5z8D3VjiF7P-eyxduROAR_9ZZk8rfkKlY4Wt4rKMsyb_QXEqqPvwnjQbdzRBPph3uqAVLsBfq-c9UgRBZY3NkF6egQ7xyzLFvi1_tl1iiC7CD1MIuaxeE3v1s8I58gzq50h48SJTjXUwZwy8RHR4zkioYr0Uxu59Q2GsEIS8nZqUXfPPxut7tUmbBmy1KTHHYAg&lib=MpF38vOPijb8uFXw1nMaNGYGwgBN3B_WD"
 export default function Produtos() {
   // Para alterar o título da página:
   document.title = "Produtos";
@@ -16,7 +17,8 @@ export default function Produtos() {
   useEffect(() => {
     const carregaProdutos = async () => {
       try {
-        const response = await fetch("http://localhost:3001/produtos");
+        // const response = await fetch("http://localhost:3001/produtos");
+        const response = await fetch(API_URL);
 
         if (!response.ok) {
           throw new Error(
@@ -24,7 +26,12 @@ export default function Produtos() {
           );
         }
 
-        const data: TipoProduto[] = await response.json();
+        const {data,status} = await response.json();
+        
+        if(status === "error"){
+          throw new Error(`Erro na listagem dos produtos ${status}`);
+        }
+
         setProdutos(data);
       } catch (error) {
         console.error(error);
@@ -85,7 +92,7 @@ export default function Produtos() {
               <th>ID</th>
               <th>NOME</th>
               <th>PREÇO</th>
-              <th>DESCRIÇÃO</th>
+              <th>ESTOQUE</th>
               <th>AVATAR</th>
               <th>AÇÕES</th>
             </tr>
@@ -96,6 +103,7 @@ export default function Produtos() {
                 <td>{produto.id}</td>
                 <td>{produto.nome}</td>
                 <td>{produto.preco}</td>
+                <td>{produto.estoque}</td>
                 <td>{produto.avatar}</td>
                 <td>
                   <img src={produto.avatar} alt={produto.nome} width={40} />
